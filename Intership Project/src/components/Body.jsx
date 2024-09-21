@@ -2,7 +2,7 @@ import RestaurantCard from "./RestraurentCard";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import { useEffect, useState } from "react";
-import ChromeDinoGame from 'react-chrome-dino'
+import ChromeDinoGame from 'react-chrome-dino';
 
 const Body = () => {
   const [listOfRes, setListOfRes] = useState([]);
@@ -15,7 +15,7 @@ const Body = () => {
 
   const fetchData = async () => {
     const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=22.3008241&lng=73.1733127&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+      "https://food-server-dur9.onrender.com/api/restaurants"
     );
     const json = await data.json();
 
@@ -84,7 +84,7 @@ const Body = () => {
       </div>
 
       {/* Restaurant Cards */}
-      <div className="res-container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl">
+      <div className="res-container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl">
         {filRes.map((rest) => (
           <Link to={`/restaurantmenu/${rest.info.id}`} key={rest.info.id}>
             <RestaurantCard resData={rest} />

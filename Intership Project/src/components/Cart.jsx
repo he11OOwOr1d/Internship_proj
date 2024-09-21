@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import ItemsList from "./ItemsList"
 import { clearCart } from "../utils/cartSlice"
+import { Link } from "react-router-dom"
 
 const Cart = () =>{
   const cartItems = useSelector((store)=>store.cart.items)
@@ -20,7 +21,12 @@ const Cart = () =>{
           
          </div>
       </div>
+
+      <div>
+        <Link to="/payment"><button className="p-2 m-2 bg-black text-white rounded-lg">Proceed to Payment</button></Link>
+      </div>
     </div>
+    
   )
 }
 

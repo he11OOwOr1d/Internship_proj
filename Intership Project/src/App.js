@@ -7,11 +7,13 @@ import Error from "./components/Error";
 import Body from "./components/Body";
 import RestaurantMenu from "./components/RestaurantMenu";
 import Contactus from "./components/Contactus";
-import Signin from "./components/sign-in";
-import Signup from "./components/signup";
+import LoginButton from "./components/sign-in"
+import RegisterButton from "./components/signup"
 import { Provider } from "react-redux"; // Import from react-redux
 import appStore from "./utils/appStore";
 import Cart from "./components/Cart";
+import { KindeProvider } from "@kinde-oss/kinde-auth-react"; // Import KindeProvider
+import PaymentPage from "./components/Payments";
 
 const routes = createBrowserRouter([
   {
@@ -36,15 +38,19 @@ const routes = createBrowserRouter([
       },
       {
         path: "/signin",
-        element: <Signin />,
+        element: <LoginButton />,
       },
       {
         path: "/signup",
-        element: <Signup />,
+        element: <RegisterButton />,
       },
       {
         path: "/cart",
-        element: <Cart/>
+        element: <Cart />,
+      },
+      {
+        path: "/payment",
+        element: <PaymentPage/>
       }
     ],
     errorElement: <Error />,
@@ -53,9 +59,16 @@ const routes = createBrowserRouter([
 
 const App = () => {
   return (
-    <Provider store={appStore}>
-      <RouterProvider router={routes} />
-    </Provider>
+    <KindeProvider
+      clientId="f5e131e6f55e4415a3c4268b001346f6"
+      domain="https://feastflyer.kinde.com"
+      logoutUri="http://localhost:1234"
+      redirectUri="http://localhost:1234"
+    >
+      <Provider store={appStore}>
+        <RouterProvider router={routes} />
+      </Provider>
+    </KindeProvider>
   );
 };
 
