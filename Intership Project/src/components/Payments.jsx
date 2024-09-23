@@ -1,48 +1,48 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigation } from 'react-router-dom'; // Import useNavigation
-import { CreditCard, Lock, ShoppingBag, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { CreditCard, Lock, ShoppingBag, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 
 export default function PaymentPage() {
-  const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOrderBooked, setIsOrderBooked] = useState(false);
-  const cartItems = useSelector((store) => store.cart.items);
-  const navigation = useNavigation(); // Use navigation for redirect
+  const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isOrderBooked, setIsOrderBooked] = useState(false)
+  const cartItems = useSelector((store) => store.cart.items)
+  const navigate = useNavigate() // React Router's navigation hook
 
   const subtotal = useMemo(() => {
     return cartItems.reduce((total, item) => {
-      const price = item.card.info.price || item.card.info.defaultPrice;
-      return total + price / 100;
-    }, 0);
-  }, [cartItems]);
+      const price = item.card.info.price || item.card.info.defaultPrice
+      return total + price / 100
+    }, 0)
+  }, [cartItems])
 
-  const shipping = 9.99;
-  const tax = subtotal * 0.05; // Assuming 5% tax
-  const total = subtotal + shipping + tax;
+  const shipping = 9.99
+  const tax = subtotal * 0.05 // Assuming 5% tax
+  const total = subtotal + shipping + tax
 
   const handlePayNow = () => {
-    setIsLoading(true);
+    setIsLoading(true)
     setTimeout(() => {
-      setIsLoading(false);
-      setIsOrderBooked(true);
-    }, 3000); // Simulate 3-second payment processing
-  };
+      setIsLoading(false)
+      setIsOrderBooked(true)
+    }, 3000) // Simulate 3-second payment processing
+  }
 
-  // Redirect to home page after 5 seconds once the order is booked
+  // useEffect to handle redirection after order booking
   useEffect(() => {
     if (isOrderBooked) {
       const timer = setTimeout(() => {
-        navigation.navigate('/'); // Redirect to home page
-      }, 5000);
+        navigate('/') // Redirect to the home page after 5 seconds
+      }, 5000)
 
-      return () => clearTimeout(timer); // Cleanup the timer on unmount or if order is booked again
+      return () => clearTimeout(timer) // Cleanup the timer on component unmount or if order is booked again
     }
-  }, [isOrderBooked, navigation]);
+  }, [isOrderBooked, navigate])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className={`max-w-4xl mx-auto relative ${isLoading ? 'blur-sm' : ''}`}>
+      <div className={`max-w-4xl mx-auto relative `}>
         <div className="bg-white shadow-2xl rounded-lg overflow-hidden">
           <div className="md:flex">
             <div className="md:w-2/3 p-8">
@@ -158,11 +158,10 @@ export default function PaymentPage() {
               <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Order Booked!</h2>
               <p className="text-gray-600">Your order has been successfully placed.</p>
-              <p className="text-gray-600 mt-1">Redirecting to home page in 5 seconds...</p>
             </div>
           </div>
         )}
       </div>
     </div>
-  );
+  )
 }
