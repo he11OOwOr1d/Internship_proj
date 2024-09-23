@@ -74,13 +74,7 @@ export default function PaymentPage() {
                     placeholder="John Doe"
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out flex items-center justify-center text-lg font-semibold"
-                >
-                  <Lock className="h-5 w-5 mr-2" />
-                  Pay Now
-                </button>
+                
               </form>
             </div>
             <div className="md:w-1/3 bg-gray-50 p-8">
@@ -124,18 +118,11 @@ export default function PaymentPage() {
                   Your payment information is encrypted
                 </p>
               </div>
-              <div className="mt-8">
-                <h4 className="text-sm font-semibold text-gray-600 mb-2">Need Help?</h4>
-                <a href="#" className="text-indigo-600 hover:text-indigo-800 text-sm">Contact our support team</a>
-              </div>
+              
             </div>
           </div>
         </div>
-        <div className="mt-8 text-center">
-          <p className="text-gray-600 text-sm">
-            By completing your purchase, you agree to our <a href="#" className="text-indigo-600 hover:underline">Terms of Service</a>
-          </p>
-        </div>
+        
       </div>
     </div>
   )
