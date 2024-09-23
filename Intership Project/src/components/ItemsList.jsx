@@ -3,7 +3,7 @@ import { RES_IMAGE } from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { addItem, removeItem } from '../utils/cartSlice';
 
-export default function ItemsList({ items }) {
+export default function ItemsList({ items, cartItems }) {
   const dispatch = useDispatch();
 
   const handleAddItem = (item) => {
@@ -42,7 +42,7 @@ export default function ItemsList({ items }) {
               className="p-1 px-2 text-xs rounded-lg bg-black text-white shadow-sm hover:bg-gray-800"
               onClick={() => handleAddItem(item)}
             >
-              Add +
+              Add + ({cartItems})
             </button>
             <button 
               className="p-1 px-2 text-xs rounded-lg bg-red-600 text-white shadow-sm hover:bg-red-800"
