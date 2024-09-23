@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { CreditCard, Lock, ShoppingBag, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 
 export default function PaymentPage() {
@@ -7,6 +8,7 @@ export default function PaymentPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isOrderBooked, setIsOrderBooked] = useState(false)
   const cartItems = useSelector((store) => store.cart.items)
+  const navigate = useNavigate() // React Router's navigation hook
 
   const subtotal = useMemo(() => {
     return cartItems.reduce((total, item) => {
@@ -26,6 +28,17 @@ export default function PaymentPage() {
       setIsOrderBooked(true)
     }, 3000) // Simulate 3-second payment processing
   }
+
+  // useEffect to handle redirection after order booking
+  useEffect(() => {
+    if (isOrderBooked) {
+      const timer = setTimeout(() => {
+        navigate('/') // Redirect to the home page after 5 seconds
+      }, 5000)
+
+      return () => clearTimeout(timer) // Cleanup the timer on component unmount or if order is booked again
+    }
+  }, [isOrderBooked, navigate])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
