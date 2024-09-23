@@ -62,8 +62,8 @@ const App = () => {
     <KindeProvider
       clientId="f5e131e6f55e4415a3c4268b001346f6"
       domain="https://feastflyer.kinde.com"
-      logoutUri="https://feastflyerrr.netlify.app/"
-      redirectUri="https://feastflyerrr.netlify.app/"
+      logoutUri="https://66f171d9ef2baf07d023fd56--joyful-fox-c6953e.netlify.app/"
+      redirectUri="https://66f171d9ef2baf07d023fd56--joyful-fox-c6953e.netlify.app/"
     >
       <Provider store={appStore}>
         <RouterProvider router={routes} />
