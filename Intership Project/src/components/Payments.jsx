@@ -1,21 +1,27 @@
-import React, { useState, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { CreditCard, Lock, ShoppingBag, ChevronDown, ChevronUp } from 'lucide-react'
+import React, { useState, useMemo } from "react";
+import { useSelector } from "react-redux";
+import {
+  CreditCard,
+  Lock,
+  ShoppingBag,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 export default function PaymentPage() {
-  const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false)
-  const cartItems = useSelector((store) => store.cart.items)
+  const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
+  const cartItems = useSelector((store) => store.cart.items);
 
   const subtotal = useMemo(() => {
     return cartItems.reduce((total, item) => {
-      const price = item.card.info.price || item.card.info.defaultPrice
-      return total + price / 100
-    }, 0)
-  }, [cartItems])
+      const price = item.card.info.price || item.card.info.defaultPrice;
+      return total + price / 100;
+    }, 0);
+  }, [cartItems]);
 
-  const shipping = 9.99
-  const tax = subtotal * 0.05 // Assuming 5% tax
-  const total = subtotal + shipping + tax
+  const shipping = 9.99;
+  const tax = subtotal * 0.05; // Assuming 5% tax
+  const total = subtotal + shipping + tax;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -23,10 +29,15 @@ export default function PaymentPage() {
         <div className="bg-white shadow-2xl rounded-lg overflow-hidden">
           <div className="md:flex">
             <div className="md:w-2/3 p-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">Secure Payment</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                Secure Payment
+              </h2>
               <form>
                 <div className="mb-6">
-                  <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="cardNumber"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Card Number
                   </label>
                   <div className="relative">
@@ -41,7 +52,10 @@ export default function PaymentPage() {
                 </div>
                 <div className="flex mb-6 space-x-4">
                   <div className="w-1/2">
-                    <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="expiryDate"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Expiry Date
                     </label>
                     <input
@@ -52,7 +66,10 @@ export default function PaymentPage() {
                     />
                   </div>
                   <div className="w-1/2">
-                    <label htmlFor="cvv" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="cvv"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       CVV
                     </label>
                     <input
@@ -64,7 +81,10 @@ export default function PaymentPage() {
                   </div>
                 </div>
                 <div className="mb-6">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Name on Card
                   </label>
                   <input
@@ -74,12 +94,30 @@ export default function PaymentPage() {
                     placeholder="John Doe"
                   />
                 </div>
-                
+                <div className="mt-8">
+                  <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                    Secure Checkout
+                  </h4>
+                  <p className="text-xs text-gray-500 flex items-center">
+                    <Lock className="h-4 w-4 mr-1 text-green-500" />
+                    Your payment information is encrypted
+                  </p>
+
+                  <button
+                    type="submit"
+                    className="mt-6 w-full flex justify-center py-3 px-6 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
+                  >
+                    Pay Now
+                    <ShoppingBag className="ml-2 h-5 w-5" />
+                  </button>
+                </div>
               </form>
             </div>
             <div className="md:w-1/3 bg-gray-50 p-8">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-gray-800">Order Summary</h3>
+                <h3 className="text-xl font-semibold text-gray-800">
+                  Order Summary
+                </h3>
                 <button
                   onClick={() => setIsOrderSummaryOpen(!isOrderSummaryOpen)}
                   className="text-indigo-600 hover:text-indigo-800 focus:outline-none md:hidden"
@@ -91,7 +129,11 @@ export default function PaymentPage() {
                   )}
                 </button>
               </div>
-              <div className={`space-y-4 ${isOrderSummaryOpen ? 'block' : 'hidden md:block'}`}>
+              <div
+                className={`space-y-4 ${
+                  isOrderSummaryOpen ? "block" : "hidden md:block"
+                }`}
+              >
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Subtotal</span>
                   <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
@@ -106,24 +148,28 @@ export default function PaymentPage() {
                 </div>
                 <div className="border-t pt-4 mt-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold text-gray-800">Total</span>
-                    <span className="text-2xl font-bold text-indigo-600">₹{total.toFixed(2)}</span>
+                    <span className="text-lg font-semibold text-gray-800">
+                      Total
+                    </span>
+                    <span className="text-2xl font-bold text-indigo-600">
+                      ₹{total.toFixed(2)}
+                    </span>
                   </div>
                 </div>
               </div>
               <div className="mt-8">
-                <h4 className="text-sm font-semibold text-gray-600 mb-2">Secure Checkout</h4>
+                <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                  Secure Checkout
+                </h4>
                 <p className="text-xs text-gray-500 flex items-center">
                   <Lock className="h-4 w-4 mr-1 text-green-500" />
                   Your payment information is encrypted
                 </p>
               </div>
-              
             </div>
           </div>
         </div>
-        
       </div>
     </div>
-  )
+  );
 }
