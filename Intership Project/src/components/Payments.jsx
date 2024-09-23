@@ -28,8 +28,8 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 ${isLoading || isOrderBooked ? 'blur-sm' : ''}`}>
-      <div className="max-w-4xl mx-auto relative">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className={`max-w-4xl mx-auto relative ${isLoading ? 'blur-sm' : ''}`}>
         <div className="bg-white shadow-2xl rounded-lg overflow-hidden">
           <div className="md:flex">
             <div className="md:w-2/3 p-8">
