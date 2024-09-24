@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react"
@@ -115,6 +115,13 @@ function OnlineStatus({ online }) {
 }
 
 function AuthButtons({ isAuthenticated, user, logout, isUserMenuOpen, toggleUserMenu }) {
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
+    }
+  }, [user]);
   if (isAuthenticated) {
     return (
       <div className="relative">
