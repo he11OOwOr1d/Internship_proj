@@ -7,8 +7,13 @@ export default function PaymentPage() {
   const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isOrderBooked, setIsOrderBooked] = useState(false)
+  const [cardNumber, setCardNumber] = useState('')
+  const [expiryDate, setExpiryDate] = useState('')
+  const [cvv, setCvv] = useState('')
+  const [name, setName] = useState('')
+  const [errors, setErrors] = useState({})
   const cartItems = useSelector((store) => store.cart.items)
-  const navigate = useNavigate() // React Router's navigation hook
+  const navigate = useNavigate()
 
   const subtotal = useMemo(() => {
     return cartItems.reduce((total, item) => {
@@ -21,28 +26,56 @@ export default function PaymentPage() {
   const tax = subtotal * 0.05 // Assuming 5% tax
   const total = subtotal + shipping + tax
 
-  const handlePayNow = () => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-      setIsOrderBooked(true)
-    }, 3000) // Simulate 3-second payment processing
+  const validateForm = () => {
+    const newErrors = {}
+
+    // Card Number Validation
+    if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
+      newErrors.cardNumber = 'Invalid card number. It should be 16 digits.'
+    }
+
+    // Expiry Date Validation
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+      newErrors.expiryDate = 'Invalid expiry date. Format should be MM/YY.'
+    }
+
+    // CVV Validation
+    if (!/^\d{3}$/.test(cvv)) {
+      newErrors.cvv = 'Invalid CVV. It should be 3 digits.'
+    }
+
+    // Name Validation
+    if (!name) {
+      newErrors.name = 'Name on card is required.'
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0 // Return true if no errors
   }
 
-  // useEffect to handle redirection after order booking
+  const handlePayNow = () => {
+    if (validateForm()) {
+      setIsLoading(true)
+      setTimeout(() => {
+        setIsLoading(false)
+        setIsOrderBooked(true) // Show success message after payment processing
+      }, 3000) // Simulates a 3-second payment processing delay
+    }
+  }
+
   useEffect(() => {
     if (isOrderBooked) {
       const timer = setTimeout(() => {
-        navigate('/') // Redirect to the home page after 5 seconds
+        navigate('/')
       }, 5000)
 
-      return () => clearTimeout(timer) // Cleanup the timer on component unmount or if order is booked again
+      return () => clearTimeout(timer)
     }
   }, [isOrderBooked, navigate])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className={`max-w-4xl mx-auto relative `}>
+      <div className={`max-w-4xl mx-auto relative`}>
         <div className="bg-white shadow-2xl rounded-lg overflow-hidden">
           <div className="md:flex">
             <div className="md:w-2/3 p-8">
@@ -56,11 +89,14 @@ export default function PaymentPage() {
                     <input
                       type="text"
                       id="cardNumber"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
+                      className={`w-full px-4 py-3 border ${errors.cardNumber ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200`}
                       placeholder="1234 5678 9012 3456"
+                      value={cardNumber}
+                      onChange={(e) => setCardNumber(e.target.value)}
                     />
                     <CreditCard className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
                   </div>
+                  {errors.cardNumber && <span className="text-red-500 text-sm">{errors.cardNumber}</span>}
                 </div>
                 <div className="flex mb-6 space-x-4">
                   <div className="w-1/2">
@@ -70,9 +106,12 @@ export default function PaymentPage() {
                     <input
                       type="text"
                       id="expiryDate"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
+                      className={`w-full px-4 py-3 border ${errors.expiryDate ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200`}
                       placeholder="MM / YY"
+                      value={expiryDate}
+                      onChange={(e) => setExpiryDate(e.target.value)}
                     />
+                    {errors.expiryDate && <span className="text-red-500 text-sm">{errors.expiryDate}</span>}
                   </div>
                   <div className="w-1/2">
                     <label htmlFor="cvv" className="block text-sm font-medium text-gray-700 mb-2">
@@ -81,9 +120,12 @@ export default function PaymentPage() {
                     <input
                       type="text"
                       id="cvv"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
+                      className={`w-full px-4 py-3 border ${errors.cvv ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200`}
                       placeholder="123"
+                      value={cvv}
+                      onChange={(e) => setCvv(e.target.value)}
                     />
+                    {errors.cvv && <span className="text-red-500 text-sm">{errors.cvv}</span>}
                   </div>
                 </div>
                 <div className="mb-6">
@@ -93,9 +135,12 @@ export default function PaymentPage() {
                   <input
                     type="text"
                     id="name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
+                    className={`w-full px-4 py-3 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200`}
                     placeholder="John Doe"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
+                  {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
                 </div>
               </form>
             </div>
@@ -134,34 +179,39 @@ export default function PaymentPage() {
                 </div>
               </div>
               <div className="mt-8">
-                <h4 className="text-sm font-semibold text-gray-600 mb-2">Secure Checkout</h4>
-                <p className="text-xs text-gray-500 flex items-center">
-                  <Lock className="h-4 w-4 mr-1 text-green-500" />
-                  Your payment information is encrypted
-                </p>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2">Secure Payment</h4>
+                <button
+                  onClick={handlePayNow}
+                  disabled={isLoading}
+                  className={`w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none ${isLoading ? 'opacity-  50 cursor-not-allowed' : ''}`}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center justify-center">
+                        <Lock className="animate-spin h-5 w-5 mr-2" />
+                        Processing...
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center">
+                        <ShoppingBag className="h-5 w-5 mr-2" />
+                        Pay Now
+                      </div>
+                    )}
+                  </button>
+                </div>
               </div>
-
-              <button
-                onClick={handlePayNow}
-                className="mt-6 w-full flex justify-center py-3 px-6 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
-              >
-                {isLoading ? 'Processing...' : 'Pay Now'}
-                {!isLoading && <ShoppingBag className="ml-2 h-5 w-5" />}
-              </button>
             </div>
           </div>
         </div>
-
+  
+        {/* Success Message Overlay */}
         {isOrderBooked && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center">
-              <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Order Booked!</h2>
-              <p className="text-gray-600">Your order has been successfully placed.</p>
+          <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-90 z-50">
+            <div className="p-6 bg-green-500 text-white rounded-md shadow-lg flex items-center space-x-2">
+              <CheckCircle className="h-6 w-6" />
+              <span className="text-lg font-medium">Order successfully placed!</span>
             </div>
           </div>
         )}
       </div>
-    </div>
-  )
-}
+    )
+  }

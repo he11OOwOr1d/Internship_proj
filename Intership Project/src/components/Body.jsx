@@ -9,6 +9,8 @@ const Body = () => {
   const [filRes, setFilRes] = useState([]);
   const [searchText, setSearchText] = useState("");
 
+  const onlineStatus = useOnlineStatus(); // Always call the hook at the top level
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -25,8 +27,23 @@ const Body = () => {
     setFilRes(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
   };
 
-  const onlineStatus = useOnlineStatus();
+  // Function to handle search button click (optional)
+  const handleSearch = () => {
+    const searchedRes = listOfRes.filter((res) =>
+      res.info.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilRes(searchedRes);
+  };
 
+  // useEffect to dynamically filter restaurants as user types
+  useEffect(() => {
+    const filteredRes = listOfRes.filter((res) =>
+      res.info.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilRes(filteredRes);
+  }, [searchText, listOfRes]);
+
+  // Move onlineStatus check to top, ensuring hooks aren't called conditionally
   if (!onlineStatus) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -38,16 +55,10 @@ const Body = () => {
     );
   }
 
+  // Loading state for when restaurant data is being fetched
   if (listOfRes.length === 0) {
     return <h1 className="text-center text-2xl text-gray-700">Loading.......</h1>;
   }
-
-  const handleSearch = () => {
-    const searchedRes = listOfRes.filter((res) =>
-      res.info.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setFilRes(searchedRes);
-  };
 
   return (
     <div className="bg-blue-50 max-w-screen-2xl p-4 min-h-screen flex flex-col items-center">
@@ -59,10 +70,10 @@ const Body = () => {
             className="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-64 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-shadow duration-300 ease-in-out shadow-sm"
             placeholder="Search for restaurants..."
             value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) => setSearchText(e.target.value)} // Update searchText dynamically
           />
           <button
-            onClick={handleSearch}
+            onClick={handleSearch} // Search button still works
             className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out transform"
           >
             Search
