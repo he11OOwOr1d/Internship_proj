@@ -1,10 +1,9 @@
-import { useDispatch, useSelector } from "react-redux"
+import {  useSelector } from "react-redux"
 import ItemsList from "./ItemsList"
 import { Link } from "react-router-dom"
 
 const Cart = () =>{
   const cartItems = useSelector((store)=>store.cart.items)
-  const dispatch = useDispatch()
   
   return (
     <div className="text-center m-4 p-4">

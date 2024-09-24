@@ -14,7 +14,6 @@ import appStore from "./utils/appStore";
 import Cart from "./components/Cart";
 import { KindeProvider } from "@kinde-oss/kinde-auth-react"; // Import KindeProvider
 import PaymentPage from "./components/Payments";
-import ProtectedRoute from "./components/ProtectedRoute";
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -46,20 +45,12 @@ const routes = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: (
-          <ProtectedRoute>
-            <Cart />
-          </ProtectedRoute>
-        ),
+        element: <Cart />,
       },
       {
         path: "/payment",
-        element: (
-          <ProtectedRoute>
-            <PaymentPage />
-          </ProtectedRoute>
-        ),
-      },
+        element: <PaymentPage/>
+      }
     ],
     errorElement: <Error />,
   },

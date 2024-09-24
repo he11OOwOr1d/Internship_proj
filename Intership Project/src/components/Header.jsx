@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react"
@@ -33,7 +33,7 @@ export default function Header() {
             </div>
             <div className="hidden md:block ml-10">
               <div className="flex items-baseline space-x-4">
-                <NavLinks online={online} cartItems={cartItems} />
+                <NavLinks online={online} cartItems={cartItems} isAuthenticated={isAuthenticated} />
               </div>
             </div>
           <div className="hidden md:block">
@@ -63,7 +63,7 @@ export default function Header() {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 flex justify-center space-y-1 sm:px-3">
-            <NavLinks online={online} cartItems={cartItems} />
+            <NavLinks online={online} cartItems={cartItems} isAuthenticated={isAuthenticated} />
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             <AuthButtons 
@@ -80,24 +80,51 @@ export default function Header() {
   )
 }
 
-function NavLinks({ online, cartItems }) {
+function NavLinks({ online, cartItems, isAuthenticated }) {
+  const [showAuthPopup, setShowAuthPopup] = useState(false)
+
+  const handleCartClick = (e) => {
+    if (!isAuthenticated) {
+      e.preventDefault()
+      setShowAuthPopup(true)
+    }
+  }
+
   return (
     <>
       <OnlineStatus online={online} />
       <NavLink to="/about">About</NavLink>
       <NavLink to="/contactus">Contact Us</NavLink>
-      <NavLink to="/cart">
+      <NavLink to="/cart" onClick={handleCartClick}>
         <ShoppingCart className="inline-block mr-2 h-5 w-5" />
         Cart ({cartItems.length})
       </NavLink>
+      {showAuthPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg">
+            <p className="text-gray-700">Please log in or sign up to view your cart.</p>
+            <div className="mt-4 flex space-x-2">
+              <LoginButton />
+              <RegisterButton />
+            </div>
+            <button 
+              onClick={() => setShowAuthPopup(false)}
+              className="mt-4 text-sm text-gray-500 hover:underline"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   )
 }
 
-function NavLink({ to, children }) {
+function NavLink({ to, children, onClick }) {
   return (
     <Link
       to={to}
+      onClick={onClick}
       className="text-white hover:bg-white hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 block"
     >
       {children}
@@ -115,13 +142,6 @@ function OnlineStatus({ online }) {
 }
 
 function AuthButtons({ isAuthenticated, user, logout, isUserMenuOpen, toggleUserMenu }) {
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
-    }
-  }, [user]);
   if (isAuthenticated) {
     return (
       <div className="relative">
