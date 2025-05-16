@@ -6,5 +6,5 @@ export const RES_IMAGE =
 
 export const MENU_API =
 
-"https://food-server-dur9.onrender.com/api/menu/"
+"https://food-server-pi.vercel.app/api/menu/"
 

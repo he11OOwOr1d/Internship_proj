@@ -17,7 +17,7 @@ const Body = () => {
 
   const fetchData = async () => {
     const data = await fetch(
-      "https://food-server-dur9.onrender.com/api/restaurants"
+      "https://food-server-pi.vercel.app/api/restaurants"
     );
     const json = await data.json();
 
