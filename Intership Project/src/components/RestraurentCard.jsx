@@ -12,6 +12,9 @@ const RestaurantCard = ({ resData }) => {
 
   // Truncate cuisines to a maximum of 2, adding '...' if there are more
   const displayedCuisines = cuisines.length > 2 ? cuisines.slice(0, 2).join(', ') + '...' : cuisines.join(', ');
+  
+  // Truncate restaurant name if it's too long (more than 20 characters)
+  const displayedName = name.length > 10 ? name.slice(0, 12) + '...' : name;
 
   return (
     <div className="m-4 p-4 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 shadow-2xl rounded-lg overflow-hidden transition-transform transform hover:scale-105 duration-500 max-w-xs">
@@ -25,7 +28,7 @@ const RestaurantCard = ({ resData }) => {
       </div>
       {/* Card Content */}
       <div className="bg-white rounded-b-lg p-4 shadow-inner flex flex-col justify-between">
-        <h4 className="text-lg font-bold text-gray-800 mb-1 text-center">{name}</h4>
+        <h4 className="text-lg font-bold text-gray-800 mb-1 text-center" title={name}>{displayedName}</h4>
         <div className="flex items-center justify-center mb-2">
           <p className="bg-green-600 text-white text-xs px-3 py-1 rounded-full flex items-center">
             {avgRating}{" "}

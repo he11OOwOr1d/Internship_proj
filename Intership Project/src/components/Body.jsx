@@ -84,7 +84,7 @@ const Body = () => {
             className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-2 rounded-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out transform"
             onClick={() => {
               const filteredRes = listOfRes.filter(
-                (res) => res.info.avgRating > 4
+                (res) => res.info.avgRating > 4.3
               );
               setFilRes(filteredRes);
             }}

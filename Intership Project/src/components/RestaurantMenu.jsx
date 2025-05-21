@@ -41,7 +41,7 @@ export default function RestaurantMenu() {
 
   return (
     <div className="p-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 min-h-screen">
-      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-lg p-8 transform hover:scale-105 transition-transform duration-500">
+      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-lg p-8">
         <div className="text-center mb-8">
           <h1 className="text-5xl font-extrabold text-gray-900 mb-3">
             {name}
