@@ -17,9 +17,11 @@ const Cart = () =>{
          </div>
       </div>
 
-      <div>
-        <Link to="/payment"><button className="p-2 m-2 bg-black text-white rounded-lg">Proceed to Payment</button></Link>
-      </div>
+      {cartItems.length > 0 && (
+        <div>
+          <Link to="/payment"><button className="p-2 m-2 bg-black text-white rounded-lg">Proceed to Payment</button></Link>
+        </div>
+      )}
     </div>
     
   )
